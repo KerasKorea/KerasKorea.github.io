@@ -1,0 +1,109 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+#theme: jekyll-theme-so-simple
+remote_theme: mmistakes/so-simple-theme
+locale: en-US
+title: "Keras for Everyone"
+description: "KEKOxTutorial"
+baseurl: # the subpath of your site, e.g. "/blog"
+url: "https://keraskorea.github.io/" # the base hostname & protocol for your site e.g. "https://ahracho.github.io"
+logo: /images/kekologo_short.png # path of site logo, e.g. "/images/logo.png"
+date_format: "%Y-%m-%d"
+
+read_time: true # reading time estimates, e.g. true
+words_per_minute: 200 # 200
+mathjax: true # MathJax equations, e.g. true
+google_fonts:
+  - name: "Nanum Gothic"
+    weights: "400,400i,700,700i"
+  - name: "Source Sans Pro"
+    weights: "400,400i,700,700i"
+  - name: "Lora"
+    weights: "400,400i,700,700i"
+
+google_analytics: # Google Analytics id, e.g. "UA-NNNNNNNN-N"
+disqus:
+  shortname: "Keras Korea" # Disqus shortname, e.g. "my_disqus_shortname"
+
+# Liquid
+liquid:
+  error_mode: strict
+
+# Build settings
+permalink: /:categories/:title/
+markdown: kramdown
+feed:
+  path: atom.xml
+
+# Pagination - https://jekyllrb.com/docs/pagination/
+paginate: 6  # amount of posts to show per page
+paginate_path: /page:num/
+
+# Search
+search_full_content: false # can have performance implications for large sites
+
+# Taxonomy pages
+category_archive_path: "/categories/#"
+tag_archive_path: "/tags/#"
+
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+# exclude:
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed
+  - jekyll-paginate
+
+# Collections
+collections:
+  recipes:
+    output: true
+permalink: /:collection/:path/
+
+# Front Matter Defaults
+defaults:
+  # Posts defaults
+  - scope:
+      path: "_posts"
+      type: posts
+    values:
+      layout: post
+      share: true
+
+# Site Author
+author:
+  name: "KEKOxTutorial"
+  picture: /images/keras_logo.jpg
+  links:
+    - title: Github
+      url: https://github.com/KerasKorea/KEKOxTutorial
+      icon: fab fa-github-square
+
+# Footer Links
+footer_links:
+    - title: Github
+      url: https://github.com/KerasKorea/KEKOxTutorial
+      icon: fab fa-github-square
