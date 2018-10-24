@@ -21,8 +21,8 @@ figure.highlight {
   margin-bottom: 1em;
   background: $base00;
   color: $base05;
-  font-family: $monospace-font-family;
-  line-height: 1.8;
+  font-family: $base-font-family;
+  line-height: 1.15;
 
   > pre,
   pre.highlight {
