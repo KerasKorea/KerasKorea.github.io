@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title:  "Keras와 GPU-enabled Kaggle Kernel을 이용한 텍스트 생성 LSTM 응용"
@@ -6,7 +5,6 @@ categories: 언어
 tags: [LSTM, 텍스트, GPU, Kaggle]
 comments: true
 ---
-
 
 # Keras와 GPU-enabled Kaggle Kernel을 이용한 텍스트 생성 LSTM 응용
 
