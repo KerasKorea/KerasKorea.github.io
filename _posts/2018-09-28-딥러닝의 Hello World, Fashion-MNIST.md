@@ -94,8 +94,36 @@ print("x_train shape:", x_train.shape, "y_train shape:", y_train.shape)
 
 제가 Jupyter Notebook에서 가장 좋아하는 기능은 시각화 입니다. matplotlib 라이브러리의 `imshow()`를 사용해 학습 데이터셋의 이미지를 시각화하여 데이터셋의 이미지 중 하나를 살펴볼 수 있습니다. 각 이미지는 28x28 모양의 흑백 이미지입니다.
 
- ```
- # 학습 데이터셋 중에서 하나의 이미지 보여주기
+```python
+ # 학습 셋 크기(shape) - 이미지 크기가 28x28 인 60,000 개의 학습 이미지 데이터, 60,000 개의 레이블
+ print("x_train shape:", x_train.shape, "y_train shape:", y_train.shape)
+
+ # 학습 셋과 테스트 셋의 데이터 개수
+ print(x_train.shape[0], 'train set')
+ print(x_test.shape[0], 'test set')
+
+ # 레이블 정의
+ fashion_mnist_labels = ["T-shirt/top",  # 인덱스 0
+                         "Trouser",      # 인덱스 1
+                         "Pullover",     # 인덱스 2
+                         "Dress",        # 인덱스 3
+                         "Coat",         # 인덱스 4
+                         "Sandal",       # 인덱스 5
+                         "Shirt",        # 인덱스 6
+                         "Sneaker",      # 인덱스 7
+                         "Bag",          # 인덱스 8
+                         "Ankle boot"]   # 인덱스 9
+
+ # 이미지 인덱스, 0에서 59,999 사이의 숫자를 선택할 수 있습니다.
+ img_index = 5
+
+ # y_train 은 에서 9까지의 레이블 포함합니다.
+ label_index = y_train[img_index]
+
+ # 레이블 출력해 봅니다. 예를들어 2 Pullover
+ print ("y = " + str(label_index) + " " +(fashion_mnist_labels[label_index]))
+
+ # 학습 데이터 중에서 이미지 한 장을 보여줍니다.
  plt.imshow(x_train[img_index])
  ```
  ![image2]
@@ -113,7 +141,34 @@ x_test = x_test.astype('float32') / 255
 데이터를 임포팅하는 과정에서, 60,000개의 학습 셋과 10,000개의 테스트셋을 얻을 수 있습니다. 이제 학습 셋을 학습 셋/검증 셋으로 나누고자 합니다. 딥러닝에서 각 유형의 데이터셋이 사용되는 방법은 다음과 같습니다.
   - Training data(학습 데이터) - 모델을 학습에 사용하는 데이터
   - Validation data(검증 데이터) - 하이퍼파라미터를 튜닝하고 모델을 검증하기 위해 사용하는 데이터
-  - Test data(테스트 데이터) - 검증 셋으로 모델의 초기 검사를 마친 후에, 모델을 테스트하는 데이터
+  - Test data(테스트 데이터) - 검증 셋으로 모델의 초기 검사를 마친 후에, 모델을 테스트하는 데이터  
+
+```python
+# 학습 데이터 셋을 학습 / 평가 셋으로 나눈다. (# 학습 셋: 55,000, 검증 셋: 5000)
+(x_train, x_valid) = x_train[5000:], x_train[:5000]
+(y_train, y_valid) = y_train[5000:], y_train[:5000]
+
+# 입력 이미지의 크기를 (28, 28) 에서 (28, 28, 1) 로 배열 차원을 변경(reshape)
+w, h = 28, 28
+x_train = x_train.reshape(x_train.shape[0], w, h, 1)
+x_valid = x_valid.reshape(x_valid.shape[0], w, h, 1)
+x_test = x_test.reshape(x_test.shape[0], w, h, 1)
+
+# 레이블에 원-핫 인코딩 적용
+# 원-핫 벡터는 단 하나의 차원에서만 1이고, 나머지 차원에서는 0인 벡터입니다.
+y_train = tf.keras.utils.to_categorical(y_train, 10)
+y_valid = tf.keras.utils.to_categorical(y_valid, 10)
+y_test = tf.keras.utils.to_categorical(y_test, 10)
+
+# 학습 셋 크기
+print("x_train shape:", x_train.shape, "y_train shape:", y_train.shape)
+
+# 학습용, 검증용, 테스트용 데이터셋의 개수
+print(x_train.shape[0], 'train set')
+print(x_valid.shape[0], 'validation set')
+print(x_test.shape[0], 'test set')
+```
+
 
 ## 모델 (Model)
 
@@ -167,7 +222,11 @@ model.compile(loss='categorical_crossentropy',
 ### 모델 학습시키기 (Train the model)
 
 배치(batch) 사이즈는 64, 에포크(epochs)는 10으로 하여 모델을 학습시킵니다.
-```
+
+```python
+from keras.callbacks import ModelCheckpoint
+
+checkpointer = ModelCheckpoint(filepath='model.weights.best.hdf5', verbose = 1, save_best_only=True)
 model.fit(x_train,
          y_train,
          batch_size=64,
@@ -175,6 +234,15 @@ model.fit(x_train,
          validation_data=(x_valid, y_valid),
          callbacks=[checkpointer])
 ```
+
+### 가장 높은 검증 정확도의 모델 불러오기(Load Model with the best validation accuracy)
+
+
+```python
+# 가장 높은 검증 정확도의 가중치 불러오기
+model.load_weights('model.weights.best.hdf5')
+```
+
 
 ### 테스트 정확도 (Test Accuracy)
 
@@ -191,8 +259,29 @@ print('\n', 'Test accuracy:', score[1])
 
 이제 훈련 된 모델을 사용하여 ```model.predict(x_test)``` 으로 테스트 셋을 예측/분류 하고 시각화할 수 있습니다 . 레이블이 빨간색으로 보인다면 실제 레이블과 매칭되지 않음(예측 틀림)을 나타냅니다. 반대로 초록색으로 보인다면 잘 예측한 것 입니다.
 
+
+```python
+# y_hat은 test 데이터셋 예측
+y_hat = model.predict(x_test)
+
+# 무작위 샘플로 10 개의 테스트 이미지와 예측 레이블 및 실제 레이블을 그려줍니다.
+figure = plt.figure(figsize=(20, 8))
+for i, index in enumerate(np.random.choice(x_test.shape[0], size=15, replace=False)):
+    ax = figure.add_subplot(3, 5, i + 1, xticks=[], yticks=[])
+    ax.imshow(np.squeeze(x_test[index])) # 각각의 이미지를 보여줌
+    predict_index = np.argmax(y_hat[index])
+    true_index = np.argmax(y_test[index]) # 각각의 이미지에 예측레이블 (실제레이블) 표시
+    ax.set_title("{} ({})".format(fashion_mnist_labels[predict_index],
+                                  fashion_mnist_labels[true_index]),
+                                  color=("green" if predict_index == true_index else "red"))
+```
+
 ![image4]
 
+
+### 참고문서
+* [케라스 공식 홈페이지]()
+* [김태영님의 케라스 블로그](https://tykimos.github.io/)
 
 
 > 이 글은 2018 컨트리뷰톤에서 [Contribute to Keras](https://github.com/KerasKorea/KEKOxTutorial) 프로젝트로 진행했습니다.  
