@@ -27,8 +27,9 @@
       {% if entry.excerpt %}
         {{ entry.excerpt | markdownify }}
         <div class="more-link">
-          <a href="{{ entry.url | relative_url }}">{{ site.data.text[site.locale].read_more | default: 'Read More' }}</a>
+          <a href="{{ entry.url | relative_url }}" style="font-style:italic;" >{{ site.data.text[site.locale].read_more | default: 'Read More' }}</a>
         </div>
+        <hr class="horizontal">
       {% endif %}
     </div>
   {% endunless %}
