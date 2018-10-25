@@ -269,7 +269,7 @@ def remember(self, state, action, reward, next_state, done):
 
 이제 우리는 과거 경험이 배열에 있고, 이것으로 **신경망** 을 훈련시킬 수 있습니다. `replay()`를 만듭시다. 우리는 우리의 모든 기억을 한번에 이용할 수 없습니다. 그것은 너무 많은 자원을 필요로 할 것이기 때문입니다. 따라서 샘플(`sample_batch_size`, 여기서 32로 설정)을 몇 개만 취하고 무작위로 선택하겠습니다.
 
-```Python
+```python
 sample_batch = random.sample(self.memory, sample_batch_size)
 ```
 
