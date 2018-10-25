@@ -31,7 +31,7 @@ html {
 
 body {
   margin: 0;
-  line-height: 1.25;
+  line-height: 1.5;
 }
 
 /**
@@ -83,10 +83,11 @@ h1 {
  */
 
 h1,
-h2,
+h2, 
 h3,
 h4 {
-  line-height: 1.2;
+  margin-top: 40px;
+  line-height: 1.15;
 }
 
 /* Grouping content
@@ -223,7 +224,7 @@ small {
 blockquote {
   margin-right: 0;
   margin-left: 0;
-  padding: 2em 3em;
+  padding: 1.5em 1.5em;
   background-color: mix(#fff, $accent-color, 95%);
   border-left: solid 0.5em $accent-color;
 

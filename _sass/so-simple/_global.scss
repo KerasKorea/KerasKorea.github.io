@@ -84,7 +84,7 @@
   margin: 0.5em 0 0;
   padding: 0;
   @include fluid-type($min-vw, $max-vw, $h1-min, $h1-max);
-
+  font-family: $title-font-family;
   a {
     color: $text-color;
     text-decoration: none;
