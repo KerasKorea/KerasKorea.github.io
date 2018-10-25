@@ -8,15 +8,15 @@
 * Gym
 
 [//]: # (Image References)
-[image0]: {{ site.url }}/images/media/134_1.gif 
-[image1]: {{ site.url }}/images/media/134_2.png 
-[image2]: {{ site.url }}/images/media/134_3.jpg 
+[image0]: {{ site.url }}/images/media/134_1.gif
+[image1]: {{ site.url }}/images/media/134_2.png
+[image2]: {{ site.url }}/images/media/134_3.jpg
 [image3]: {{ site.url }}/images/media/134_4.jpeg
-[image4]: {{ site.url }}/images/media/134_5.png 
-[image5]: {{ site.url }}/images/media/134_6.png 
-[image6]: {{ site.url }}/images/media/134_7.png 
-[image7]: {{ site.url }}/images/media/134_8.png 
-[image8]: {{ site.url }}/images/media/134_9.png 
+[image4]: {{ site.url }}/images/media/134_5.png
+[image5]: {{ site.url }}/images/media/134_6.png
+[image6]: {{ site.url }}/images/media/134_7.png
+[image7]: {{ site.url }}/images/media/134_8.png
+[image8]: {{ site.url }}/images/media/134_9.png
 [image9]: {{ site.url }}/images/media/134_10.gif
 
 
@@ -135,7 +135,7 @@ next_state, reward, done, info = env.step(action)
 
 ### 0# 모델 만들기 (Initialization)
 
-```Python
+```python
 # Deep Q Learning 을 위한 신경망 만들기
 # Sequential() 은 레이어를 쌓아줍니다.
 model = Sequential()
@@ -161,7 +161,7 @@ model.compile(loss=’mse’, optimizer=Adam(lr=self.learning_rate))
 
 이 학습 과정은 **신경망** 이 `state` 로부터 보상을 예측할 수 있게 합니다.
 
-```Python
+```python
 model.fit(state, reward_value, epochs=1, verbose=0)
 ```
 
@@ -251,13 +251,13 @@ target = reward + gamma * np.amax(model.predict(next_state))
 
 우리는 우리의 경험을 `memory`라 불리는 배열에 저장하고, state, action, 보상, 그리고 next state를 배열 `memory`에 추가할 `remember()`함수을 만들 것입니다.
 
-```Python
+```python
 memory.append((state, action, reward, next_state, done))
 ```
 
 그리고 remember() 함수는 단순히 state, action 및 보상을 메모리에 저장합니다.
 
-```Python
+```python
 def remember(self, state, action, reward, next_state, done):
         self.memory.append((state, action, reward, next_state, done))
 ```
@@ -279,7 +279,7 @@ sample_batch = random.sample(self.memory, sample_batch_size)
 
 그것을 실행하기 위해서 우리는 `gamma`를 사용할 것입니다. 이러한 방식으로, 우리의 DQN agent는 주어진 State에서 discounted future reward를 최대화하는 법을 배울 것입니다
 
-```Python
+```python
 def replay(self, batch_size):
         sample_batch = random.sample(self.memory, sample_batch_size)
         for state, action, reward, next_state, done in sample_batch:
@@ -304,7 +304,7 @@ DQN 에이전트가 충분한 경험을 가지고 있으면 에이전트는 현�
 
 `np.argmax()`는 act_values[0]에서 두 요소 사이의 가장 높은 값의 지수를 반환하는 함수입니다. 예를 들어, 각 숫자는 조치 0과 1을 선택하는 보상을 나타내는 [0.21, 0.42]와 같이 보일 수 있습니다. 이 경우 1이 반환됩니다.
 
-```Python
+```python
 def act(self, state):
         if np.random.rand() <= self.exploration_rate:
             return random.randrange(self.action_size)
@@ -318,7 +318,7 @@ def act(self, state):
 ### Let’s code!
 #### 0# DQL Agent
 
-```Python
+```python
 class Agent():
     def __init__(self, state_size, action_size):
         self.weight_backup      = "cartpole_weight.h5"
@@ -370,7 +370,7 @@ def replay(self, sample_batch_size):
 
 #### 1# main() function
 
-```Python
+```python
 class CartPole:
     def __init__(self):
         self.sample_batch_size = 32
@@ -440,7 +440,7 @@ if __name__ == "__main__":
 
 [GitHub](https://github.com/GaetanJUVIN/Deep_QLearning_CartPole)에서 이 게시물에 사용된 코드를 찾을 수 있습니다. game renderer를 켜려면 아래 주석을 풀어야 합니다. :-)
 
-```Python
+```python
 #                    self.env.render()
 ```
 
