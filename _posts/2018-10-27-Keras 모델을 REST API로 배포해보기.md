@@ -15,6 +15,8 @@ comments: true
 * REST API
 * flask
 
+---
+
 ### 개요
 이번 튜토리얼에서, 우리는 케라스 모델을 REST API로 배포하는 간단한 방법을 설명합니다.
 
