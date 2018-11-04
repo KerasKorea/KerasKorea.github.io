@@ -1,3 +1,12 @@
+---
+layout: post
+title:  "Keras 와 Gym 과 함께하는 Deep Q-Learning 을 향한 여행 🛫"
+categories: 게임
+tags: [강화학습, 게임, Q-Learning, Gym]
+comments: true
+---
+
+
 ## Keras 와 Gym 과 함께하는 Deep Q-Learning 을 향한 여행 🛫(My Journey Into Deep Q-Learning with Keras and Gym
 [원문 링크](https://medium.com/@gtnjuvin/my-journey-into-deep-q-learning-with-keras-and-gym-3e779cc12762)
 > 이 튜토리얼은 Deep Q-Learning으로 CartPole이라는 게임을 학습시키는 것에 대한 것입니다. 기본적인 내용을 차근차근 다루니 Deep Reinforcement Learning 초보자에게 좋을 것이라고 생각합니다.
@@ -25,8 +34,6 @@
 
 *figure1 : CartPole 게임*
 
-<br></br>
-
 이 글은 오래된 게임인 **CartPole** 을 해보기위해 적용된 **Deep Reinforcement Learning(Deep Q-Learning)** 을 구현하는 방법을 보여줍니다.
 
 작업을 용이하게 하기 위해 두 가지 도구를 사용했습니다.
@@ -40,8 +47,6 @@
 
 이 튜토리얼에 있는 코드는 [*Github*](https://github.com/GaetanJUVIN/Deep_QLearning_CartPole)에서 가져왔습니다.
 
-<br></br>
-<br></br>
 
 ### 강화학습은 무엇일까? (What is Reinforcement Learning?)
 
@@ -49,25 +54,20 @@
 
 이런 종류의 기계 학습은 인간의 학습 방식과 매우 유사합니다. 예를 들어, 이것은 우리가 걷는 법을 배울 때와 같습니다. 우리는 한 발을 다른 발 앞에 놓으려고 여러 번 시도하지만, 우리가 걷는 데 성공하기 까지는 많은 실패와 관찰 후에만 가능합니다.
 
-<br></br>
 
 ![image1]
 
 *figure2 : 강화학습이란?*
 
-<br></br>
-<br></br>
 
 ### Deep Reinforcement Learning 이란? (What is Deep Reinforcement Learning?)
 [구글의 딥마인드(DeepMind)](https://deepmind.com/blog/deep-reinforcement-learning/)는 [Playing Atari with Deep Reinforcement Learning](https://arxiv.org/abs/1312.5602)이라는 유명한 논문을 발표했습니다. 👀
 
-<br></br>
 
-![image2](./media/134_3.jpg)
+![image2](https://github.com/KerasKorea/KEKOxTutorial/raw/master/media/134_3.jpg)
 
 *figure3 : DeepMind 로고*
 
-<br></br>
 
 2013년 말, 구글은 **Deep Q Network(DQN)** 라는 새로운 알고리즘을 선보였습니다. AI 에이전트가 화면을 관찰하는 것만으로 어떻게 게임을 배울 수 있는지를 보여줬습니다. AI 에이전트는 게임에 대한 사전 정보를 받지 않고도 게임을 어떻게 하는지 배울 수 있습니다.
 
@@ -79,8 +79,6 @@ Deep Q Network 알고리즘에서 신경망은 환경을 기반으로 최고의 
 
 우리는 **Q 함수** 라고 불리는 함수를 가지고 있고, 이 함수는 State를 기반으로 잠재적인 보상을 추정하는 데 사용됩니다. 우리는 그것을 Q(State, Action)라고 부릅니다. 즉, 여기서 Q는 `State` 및 `Action`을 기준으로 예상되는 미래 값을 계산하는 함수 입니다.
 
-<br></br>
-<br></br>
 
 ### 어린시절 하던 오래된 게임 CartPole (An old game from our childhood: CartPole)
 이 게시물에서는 에이전트에게 복잡한 게임을 교육하는 데 시간이 좀 걸릴 수 있기 때문에 "단순한" 게임을 선택했습니다(몇 시간에서 하루 종일 💤).
@@ -103,8 +101,6 @@ Gym은 게임 환경과의 모든 상호작용을 단순화함으로써 AI 에�
 next_state, reward, done, info = env.step(action)
 ```
 
-<br></br>
-<br></br>
 
 ### 단순 신경망을 사용하기 위한 Keras 사용 (Using Keras To Implement a Simple Neural Network)
 
@@ -116,13 +112,11 @@ next_state, reward, done, info = env.step(action)
 
 **신경망** 은 기본적으로 데이터 쌍(입력 및 출력 데이터)을 기반으로 학습하고, 특정 유형의 패턴을 탐지하고, 또 다른 입력 데이터를 기반으로 출력을 예측하는 알고리즘입니다.
 
-<br></br>
 
 ![image4]
 
 *figure5 : 3개의 입력, 1개의 히든 레이어, 2개의 출력*
 
-<br></br>
 
 우리가 이 포스트에서 사용할 **신경망** 은 figure5와 유사합니다. 그것은 4개의 정보를 받는 입력 레이어와 3개의 히든 레이어를 가질 것입니다. 그리고 게임 버튼이 2개(0과 1)이므로 출력 레이어에 노드가 2개 있을 것입니다.
 
@@ -130,8 +124,6 @@ next_state, reward, done, info = env.step(action)
 
 **Keras** 는 기본적인 **신경망** 을 구현하는 것을 정말 간단하게 만듭니다. 🤓
 
-<br></br>
-<br></br>
 
 ### 0# 모델 만들기 (Initialization)
 
@@ -150,8 +142,6 @@ model.add(Dense(self.action_size, activation=’linear’))
 model.compile(loss=’mse’, optimizer=Adam(lr=self.learning_rate))
 ```
 
-<br></br>
-<br></br>
 
 ### 1# 신경망 학습 (Training of our neural network)
 
@@ -165,8 +155,6 @@ model.compile(loss=’mse’, optimizer=Adam(lr=self.learning_rate))
 model.fit(state, reward_value, epochs=1, verbose=0)
 ```
 
-<br></br>
-<br></br>
 
 ### 2# 예측하기 (Prediction)
 
@@ -176,8 +164,6 @@ model.fit(state, reward_value, epochs=1, verbose=0)
 prediction = model.predict(state)
 ```
 
-<br></br>
-<br></br>
 
 ### Deep Q Network 만들기 (Deep Q Network Implementation)
 
@@ -185,7 +171,6 @@ prediction = model.predict(state)
 
 *figure6 : Deep Q Network*
 
-<br></br>
 
 게임에서 보상은 성과와 관련이 있습니다. 그것은 종종 숫자, 즉 점수와 관련이 있습니다.
 
@@ -193,8 +178,6 @@ CartPole의 경우 점수가 없습니다. 그 보상은 그 선수가 얼마나
 
 **DQN 알고리즘** 에는 *기억* 과 *재생* 이라는 두 가지 매우 중요한 method도 있습니다. 둘 다 아주 간단한 개념이고 우리가 인간으로서 어떻게 사는지 더 잘 설명할 수 있습니다: 여러분은 각각의 행동을 한 후에 무엇을 했는지 기억하고, 충분한 요소를 가지고 있을 때 여러분은 마음 속에 상황을 재현하려고 합니다. 그리고 그것은 항상 "그렇게 했어야 했는데 😞"로 끝납니다.
 
-<br></br>
-<br></br>
 
 ### 0# Global Parameters
 
@@ -211,8 +194,6 @@ CartPole의 경우 점수가 없습니다. 그 보상은 그 선수가 얼마나
 > `discounted future reward`를 처음 봤을 때, 직역하면 할인된 미래 보상..? 😵 이게 뭐지 라고 생각했고 커뮤니티에 질문하게 되었습니다. `discounted future reward`는 현재 받을 보상을 미래에 받을 보상보다 더 큰 가중치를 준다는 것이라고 합니다.
 > 그 이유가 무엇인지 재질문을 했더니 '직관적으로 100년 뒤에 받는 천만원보다 현재 받는 천만원의 가치가 더 크다고 보는거죠. agent를 학습시킬 때에도 우리가 이렇게 기대하는 것처럼 학습시켜주기 위함일 것 같습니다' 라고 답을 받았습니다. 사람이랑 정말 비슷하네요.
 
-<br></br>
-<br></br>
 
 ### 1# 어떻게 우리는 더 오래 생존하기 위해 이러한 직관을 논리적으로 표현할까? (How do we logically represent this intuition to survive longer?)
 
@@ -220,7 +201,6 @@ CartPole의 경우 점수가 없습니다. 그 보상은 그 선수가 얼마나
 
 *figure7: Q-learning의 수학적 표현*
 
-<br></br>
 
 손실은 예측이 실제 목표에서 얼마나 멀리 떨어져 있는지를 나타내는 값입니다. 예를 들어, 모델의 예측은 오른쪽 버튼을 눌러 더 많은 보상을 얻을 수 있을 때 왼쪽 버튼을 누르는 것이 더 많은 손실을 나타낸다는 것을 나타낼 수 있습니다.
 
@@ -236,14 +216,11 @@ Keras는 우리의 가장 어려운 일을 맡을 것입니다. 이 공식에서
 target = reward + gamma * np.amax(model.predict(next_state))
 ```
 
-<br></br>
 
 `fit()`함수의 경우, **Keras** 는 신경망 출력에서 대상을 빼서 제곱을 계산합니다. 그런 다음 신경 네트워크를 초기화할 때 정의한 learning rate를 적용합니다.
 
 이 기능은 우리의 예측과 목표 사이의 차이를 학습 비율로 감소시킵니다. 업데이트 프로세스를 반복하면서 Q-값의 근사치가 실제 Q-값에 수렴됩니다. 즉, 손실이 감소하고 점수가 높아집니다.
 
-<br></br>
-<br></br>
 
 ### 2# Remember
 
@@ -262,8 +239,6 @@ def remember(self, state, action, reward, next_state, done):
         self.memory.append((state, action, reward, next_state, done))
 ```
 
-<br></br>
-<br></br>
 
 ### 3# Replay
 
@@ -273,7 +248,6 @@ def remember(self, state, action, reward, next_state, done):
 sample_batch = random.sample(self.memory, sample_batch_size)
 ```
 
-<br></br>
 
 에이전트가 오랫동안 잘 수행되도록 하려면 즉각적인 보상뿐만 아니라 앞으로 받게 될 보상도 고려해야 합니다.
 
@@ -293,8 +267,6 @@ def replay(self, batch_size):
             self.exploration_rate *= self.exploration_decay
 ```
 
-<br></br>
-<br></br>
 
 ### 4# Act
 
@@ -312,8 +284,6 @@ def act(self, state):
         return np.argmax(act_values[0])
 ```
 
-<br></br>
-<br></br>
 
 ### Let’s code!
 #### 0# DQL Agent
@@ -366,7 +336,6 @@ def replay(self, sample_batch_size):
             self.exploration_rate *= self.exploration_decay
 ```
 
-<br></br>
 
 #### 1# main() function
 
@@ -404,7 +373,6 @@ if __name__ == "__main__":
     cartpole.run()
 ```
 
-<br></br>
 
 ### Training time!
 
@@ -416,7 +384,6 @@ if __name__ == "__main__":
 
 *figure8 : 진행사항*
 
-<br></br>
 
 학습 단계에서는 여러 단계를 거칩니다.
 
@@ -430,7 +397,6 @@ if __name__ == "__main__":
 
 *figue9 : 늘어난 점수*
 
-<br></br>
 
 바로 이겁니다, 우리는 숙련된 CartPole 플레이어를 만들었어요! 👍 👍
 
@@ -444,7 +410,6 @@ if __name__ == "__main__":
 #                    self.env.render()
 ```
 
-<br></br>
 
 > 이 글은 2018 컨트리뷰톤에서 Contribute to Keras 프로젝트로 진행했습니다.
 >
