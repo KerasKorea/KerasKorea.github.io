@@ -17,6 +17,23 @@
 
     {% include footer.html %}
     {% include scripts.html %}
+
+    <a href="#" class="jcm-top hidden-xs hidden-sm"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
+    <script>
+    $( document ).ready( function() {
+      $( window ).scroll( function() {
+        if ( $( this ).scrollTop() > 200 ) {
+          $( '.jcm-top' ).fadeIn();
+        } else {
+          $( '.jcm-top' ).fadeOut();
+        }
+      } );
+      $( '.jcm-top' ).click( function() {
+        $( 'html, body' ).animate( { scrollTop : 0 }, 400 );
+        return false;
+      } );
+    } );
+    </script>
   </body>
 
 </html>
