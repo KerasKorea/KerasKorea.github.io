@@ -396,3 +396,19 @@
   display: block;
   margin: auto;
 }
+
+/* 맨위로가기 버튼 */
+a.jcm-top {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    border-radius: 5px;
+    color: #ffffff;
+    text-align: center;
+    width: 40px;
+    height: 40px;
+    font-size: 40px;
+    background-color:#323232; opacity:0.5; filter:alpha(opacity=50); 
+    z-index: 999;
+    display: none;
+}a.jcm-top:hover{background-color:#000}

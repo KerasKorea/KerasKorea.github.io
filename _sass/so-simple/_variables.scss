@@ -1,6 +1,7 @@
 /* ==========================================================================
    Variables
    ========================================================================== */
+@import url(https://cdn.rawgit.com/openhiun/hangul/14c0f6faa2941116bb53001d6a7dcd5e82300c3f/nanumbarungothic.css);
 
 /* Breakpoint widths */
 $small: 320px !default;
@@ -42,11 +43,11 @@ $serif-font-family: "Lora", serif !default;
 $sans-serif-font-family: "Source Sans Pro", sans-serif !default;
 $monospace-font-family: Menlo, Consolas, Monaco, "Courier New", Courier, monospace !default;
 
-$base-font-family: "Nanum Gothic" !default;
-$headline-font-family: "Nanum Gothic" !default;
-$title-font-family: $serif-font-family !default;
+$base-font-family: "Nanum Barun Gothic" !default;
+$headline-font-family: "Nanum Barun Gothic" !default;
+$title-font-family: $sans-serif-font-family !default;
 $description-font-family: $serif-font-family !default;
-$meta-font-family: "Nanum Gothic" !default;
+$meta-font-family: "Nanum Barun Gothic" !default;
 
 $page-title-weight: bold !default;
 $entry-title-weight: bold !default;
