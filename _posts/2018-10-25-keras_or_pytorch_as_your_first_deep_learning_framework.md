@@ -14,7 +14,7 @@ comments: true
 * PyTorch
 * framework
 
-![Keras_vs_PyTorch](https://github.com/KerasKorea/KEKOxTutorial/blob/issue_42/media/42_0.png)  
+![Keras_vs_PyTorch](https://github.com/KerasKorea/KEKOxTutorial/blob/master/media/42_0.png)  
 
 > 본 글을 읽고 있는 당신, 딥러닝을 배우고 싶나요? 딥러닝을 당신의 사업에 적용하고 싶든, 다음 프로젝트에 적용하고 싶든, 아니면 그저 시장성 있는 기술을 갖고 싶든, 배우기에 적절한 프레임워크를 선택하는 것이 당신의 목표에 도달하기 위해 중요한 첫 단계입니다. 
 
