@@ -14,7 +14,9 @@ comments: true
 * PyTorch
 * framework
 
-![Keras_vs_PyTorch](https://github.com/KerasKorea/KEKOxTutorial/blob/master/media/42_0.png)  
+---
+
+![Keras_vs_PyTorch](https://raw.githubusercontent.com/KerasKorea/KEKOxTutorial/master/media/42_0.png)  
 
 > 본 글을 읽고 있는 당신, 딥러닝을 배우고 싶나요? 딥러닝을 당신의 사업에 적용하고 싶든, 다음 프로젝트에 적용하고 싶든, 아니면 그저 시장성 있는 기술을 갖고 싶든, 배우기에 적절한 프레임워크를 선택하는 것이 당신의 목표에 도달하기 위해 중요한 첫 단계입니다. 
 
@@ -103,7 +105,7 @@ PyTorch보다 간단한 Keras는 더이상 장난감을 의미하진 않습니�
 ### Keras vs PyTorch : 인기와 학습자료 접근성
 프레임워크의 인기는 단지 유용성의 대리만은 아닙니다. 작업 코드가 있는 튜토리얼, 리포지토리 그리고 단체 토론 등 커뮤니티 지원도 중요합니다. 2018년 6월 현재, Keras와 PyTorch는 GitHub과 arXiv 논문에서 인기를 누리고 있습니다.(Keras를 언급한 대부분의 논문들은 Tensorflow 백엔드 또한 언급하고 있습니다.) KDnugget에 따르면, Keras와 PyTorch는 가장 빠르게 성장하는 [데이터 과학 도구들](https://www.kdnuggets.com/2018/05/poll-tools-analytics-data-science-machine-learning-results.html)입니다.
 
-![Percentof ML papers that mention...](https://github.com/KerasKorea/KEKOxTutorial/blob/issue_42/media/42_1.png)  
+![Percentof ML papers that mention...](https://github.com/KerasKorea/KEKOxTutorial/blob/master/media/42_1.png?raw=true)  
 
 > 지난 6년간 43k개의 ML논문을 기반으로, arxiv 논문들에서 딥러닝 프레임워크에 대한 언급에 대한 자료입니다. Tensorflow는 전체 논문의 14.3%, PyTorch는 4.7%, Keras 4.0%, Caffe 3.8%, Theano 2.3%, Torch 1.5. MXNet/chainer/cntk는 1% 이하로 언급되었습니다. [참조](https://t.co/YOYAvc33iN) - Andrej Karpathy (@karpathy) 
 
@@ -149,9 +151,9 @@ PyTorch 모델을 추출하는 건 python 코드 때문에 더 부담되기에, 
 
 PyTorch는 Tensorflow만큼 빠르며, RNN에선 잠재적으로 더 빠릅니다. Keras는 지속적으로 더 느립니다. 위의 첫 번째 비교를 작성한 저자가 지적했듯이, 고성능 프레임워크의 연산 효율성 향상(대부분 PyTorc와 Tensorflow)은 빠른 개발 환경과 Keras가 제공하는 실험의 용이성보다 더 중요할 것입니다.
 
-![Tesla p100](https://github.com/KerasKorea/KEKOxTutorial/blob/issue_42/media/42_2.png)  
+![Tesla p100](https://github.com/KerasKorea/KEKOxTutorial/blob/master/media/42_2.png?raw=true)  
 
-![Tesla K80](https://github.com/KerasKorea/KEKOxTutorial/blob/issue_42/media/42_3.png)  
+![Tesla K80](https://github.com/KerasKorea/KEKOxTutorial/blob/master/media/42_3.png?raw=true)  
 
 #### 요약
 - 학습 속도에 대한 걱정과 달리, PyTorch가 Keras를 능가
