@@ -26,11 +26,12 @@ Figure 1: 뉴럴넷에 이미지내의 좌표를 주고 해당 좌표의 색 예
 
 뉴럴넷은 아마도 이미지를 외울 것(오버피팅)입니다. 이것은 우리의 뉴럴넷이 이미지 전체에 대해 wieghts로 인코딩한다는 것을 의미합니다. 우리는 각 위치에 대해 조회해볼 수 있고, 결국 전체 이미지를 reconstruction 할 수 있습니다.
 
+
 <img src="{{ site.url }}/images/media/204_2.png">
 Figure 2: 훈련된 신경망은 이미지를 스크래치부터 reconstrut 한다
 
-이제 한 가지 질문이 떠오릅니다. 그럼 우리는 이걸 어떻게 3D 볼륨 렌더링으로 확장시킬 수 있을까? 위에서 본 비슷한 프로세스를 구현하려면 모든 복셀(볼륨 픽셀)에 대한 지식이 필요합니다. 알고 보니, 이것은 해보기에 꽤 어려운 작업입니다.
 
+이제 한 가지 질문이 떠오릅니다. 그럼 우리는 이걸 어떻게 3D 볼륨 렌더링으로 확장시킬 수 있을까? 위에서 본 비슷한 프로세스를 구현하려면 모든 복셀(볼륨 픽셀)에 대한 지식이 필요합니다. 알고 보니, 이것은 해보기에 꽤 어려운 작업입니다.
 NeRF 논문의 저자들의 미니멀하고 우아한 방법은 3D 장면을 몇 개의 사진을 통해 학습하는 것을 제안합니다. 복셀을 학습에 사용하지 않기로 한다는 것입니다. 뉴럴넷은 volumetric scene을 모델링하는 방법을 학습하여 학습 시간에 모델이 본 적 없는 3D 장면의 새로운 뷰(이미지)를 생성합니다.
 
 ----
@@ -66,7 +67,9 @@ EPOCHS = 20
 
 
 <img src="{{ site.url }}/images/media/204_3.png">
+
 Figure 3: Multiple camera angles (출처 : NeRF 논문)
+
 
 위에서 나온 카메라 포즈에 대해 이해하기 위해서 먼저 카메라는 실제와 2-D 이미지 사이의 매핑(mapping)이라고 생각해야합니다.
 
@@ -83,7 +86,9 @@ Figure 3: Multiple camera angles (출처 : NeRF 논문)
 <img src="{{ site.url }}/images/media/204_6.png" width=400>
 Figure 5: The affine transformation.
 
+
 COLMAP 프레임은 [right, down, forwards] 또는 [x, -y, -z] 입니다. COLMAP에 대한 자세한 설명은 [여기](https://colmap.github.io/)를 참고하세요.
+
 
 ```python
 # 데이터가 존재하지 않으면 다운로드
@@ -106,7 +111,9 @@ plt.imshow(images[np.random.randint(low=0, high=num_images)])
 Downloading data from https://people.eecs.berkeley.edu/~bmild/nerf/tiny_nerf_data.npz
 12730368/12727482 [==============================] - 0s 0us/step
 ```
+
 <img src="{{ site.url }}/images/media/204_7.png" width=200>
+
 
 ---
 ### Data pipeline
@@ -120,21 +127,27 @@ N픽셀의 이미지를 생각해봅시다. 우리는 각 픽셀을 통해 레�
 <img src="{{ site.url }}/images/media/204_8.gif">
 Figure 6: t가 3일 때의 r(t) = o + td
 
+
 Figure 7에서, 우리는 레이를 고려하여, 우리는 레이의 몇 가지 랜덤한 점을 샘플링합니다. 이러한 샘플링 포인트는 각각 고유한 위치(x, y, z)를 가지며 레이는 시야각(theta, phi)을 가집니다. 시야각(viewing angle)은 특히 흥미로운데, 우리는 각각 독특한 시야각을 가진 다양한 방법으로 하나의 픽셀을 통해 레이를 촬영할 수 있기 때문입니다. 여기서 주목해야 할 또 다른 흥미로운 점은 샘플링 프로세스에 추가되는 노이즈입니다. 우리는 샘플이 연속적인 분포에 해당하도록 각 샘플에 균일한 노이즈를 추가합니다. Figure 7에서 파란색 점은 고르게 분포되었고, 흰색 점(t1, t2, t3)은 표본 사이에 무작위로 배치되었습니다.
+
 
 <img src="{{ site.url }}/images/media/204_9.gif">
 Figure 7: 레이의 샘플링 포인트들
 
+
 Figure 8은 전체 샘플링 과정을 3D로 보여주며, 여기서 흰색 이미지에서 나오는 레이를 볼 수 있습니다. 즉, 각 픽셀에 해당하는 레이가 존재하고 각 레이의 서로 다른 지점에서 샘플링 한다는 것입니다.
+
 
 <img src="{{ site.url }}/images/media/204_10.gif">
 Figure 8: 3D상에 있는 이미지의 모든 픽셀에서 레이 쏘기
+
 
 이 샘플링된 포인트들은 NeRF 모델의 인풋입니다. 그리고 모델은 샘플링된 포인트에 대한 RGB 컬러와 볼륨 밀도(volume density)를 물어봅니다.
 
 
 <img src="{{ site.url }}/images/media/204_11.png">
 Figure 9: 데이터 파이프라인 (출처 : NeRF 논문)
+
 
 ```python
 def encode_position(x):
@@ -282,17 +295,17 @@ val_ds = (
 )
 ```
 
+
 ### NeRF model
 
 이 모델은 ReLU를 사용하는 다층 퍼셉트론(MLP)입니다.
 
 논문에서 발췌한 내용:
-
 "우리는 네트워크가 볼륨 밀도 시그마(volume density sigma)를 위치 x의 함수로 예측하도록 제한하고 RGB 색상 c를 위치와 보기 방향 모두의 함수로 예측할 수 있도록 함으로써 표현이 멀티 뷰 일관성을 갖도록 장려합니다. 이를 위해 MLP는 먼저 입력 3D 좌표 x를 8개의 fully-connected 레이어로 처리하고(ReLU activations 및 레이어당 256 채널 사용), 시그마 및 256차원 피처 벡터를 출력합니다. 이 특징 벡터는 카메라 광선의 레이 방향과 연결되고 ReLU activations과 128 채널을 사용하여 하나의 추가 fully-connected 레이어로 전달되어 뷰에 의존 하는 RGB 색상을 출력합니다."
+
 
 여기서 우리는 최소한의 구현을 위해 노력했고 논문에서 언급한 256개 대신 64개의 Dense 유닛을 사용했습니다.
 
-The model is a multi-layer perceptron (MLP), with ReLU as its non-linearity.
 
 ```python
 def get_nerf_model(num_layers, num_pos):
@@ -367,6 +380,7 @@ def render_rgb_depth(model, rays_flat, t_vals, rand=True, train=True):
         depth_map = tf.reduce_sum(weights * t_vals[:, None, None], axis=-1)
     return (rgb, depth_map)
 ```
+
 ---
 
 ### Training
@@ -640,6 +654,7 @@ Epoch 20/20
 
 <img src="{{ site.url }}/images/media/204_32.gif">
 
+
 ---
 
 ### Inference
@@ -777,7 +792,6 @@ imageio.mimwrite(rgb_video, rgb_frames, fps=30, quality=7, macro_block_size=None
 ### Conclusion
 
 우리는 NeRF의 핵심 아이디어와 방법론에 대한 직관을 제공하기 위해 NeRF의 최소 구현을 해보았습니다. 이 방법은 컴퓨터 그래픽스 분야의 다양한 다른 작품에서 사용되어 왔습니다.
-
 우리는 독자들이 이 코드를 예시로 사용하고 하이퍼파라미터를 가지고 놀아보고 출력을 시각화할 것을 권장하고 싶습니다. 아래에서는 더 많은 에폭 동안 학습된 모델의 결과도 보여줍니다.
 
 <table>
