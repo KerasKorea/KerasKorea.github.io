@@ -15,6 +15,7 @@ comments: true
 * NeRF
 * 3D Reconstruction
 
+
 ### Introduction
 이 튜토리얼에서는 우리는 Ben Mildenhall et. al가 쓴 [NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis](https://arxiv.org/abs/2003.08934) 논문의 최소로 필요한 만큼만을 구현하고 있습니다. 저자들은 뉴럴넷을 이용한 볼륨렌더링 방법으로 novel view synthesis 하는 독창적인 방법에 대해 제안합니다.
 
