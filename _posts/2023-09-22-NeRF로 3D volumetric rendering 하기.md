@@ -1,3 +1,12 @@
+---
+layout: post
+title:  "NeRF로 3D volumetric rendering 하기"
+categories: 3D Computer Vision
+tags: [Computer Vision, 3D, Novel View Synthesis]
+comments: true
+---
+
+
 ## NeRF로 해보는 3D volumetric rendering
 [원문 링크](https://keras.io/examples/vision/nerf/)
 > 이 튜토리얼은 3D 볼륨 렌더링하는 모델인 NeRF를 구현 코드 및 이해를 위한 배경지식으로 구성되어 있습니다.
