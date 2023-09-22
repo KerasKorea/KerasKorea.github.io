@@ -1,3 +1,12 @@
+---
+layout: post
+title:  "NeRF로 3D volumetric rendering 하기"
+categories: 3D Computer Vision
+tags: [Computer Vision, 3D, Novel View Synthesis]
+comments: true
+---
+
+
 ## NeRF로 해보는 3D volumetric rendering
 [원문 링크](https://keras.io/examples/vision/nerf/)
 > 이 튜토리얼은 3D 볼륨 렌더링하는 모델인 NeRF를 구현 코드 및 이해를 위한 배경지식으로 구성되어 있습니다.
@@ -12,14 +21,14 @@
 위 설명에 대해 당신을 직관적으로 돕기 위해, 이 질문으로 시작해봅시다: 이미지에서 픽셀의 위치를 뉴럴넷에 주고 그 위치의 색을 예측하도록 요청하는 것이 가능할까요?
 
 </br>
-<div style ="text-align:center";><img src="./media/204_1.png"><figcaption>Figure 1: 뉴럴넷에 이미지내의 좌표를 주고 해당 좌표의 색 예측하기</figcaption></img></div>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_1.png"><figcaption>Figure 1: 뉴럴넷에 이미지내의 좌표를 주고 해당 좌표의 색 예측하기</figcaption></img></div>
 </br>
 
 
 뉴럴넷은 아마도 이미지를 외울 것(오버피팅)입니다. 이것은 우리의 뉴럴넷이 이미지 전체에 대해 wieghts로 인코딩한다는 것을 의미합니다. 우리는 각 위치에 대해 조회해볼 수 있고, 결국 전체 이미지를 reconstruction 할 수 있습니다.
 
 </br>
-<div style ="text-align:center";><img src="./media/204_2.png"><figcaption>Figure 2: 훈련된 신경망은 이미지를 스크래치부터 reconstrut 한다</figcaption></img></div>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_2.png"><figcaption>Figure 2: 훈련된 신경망은 이미지를 스크래치부터 reconstrut 한다</figcaption></img></div>
 </br>
 
 이제 한 가지 질문이 떠오릅니다. 그럼 우리는 이걸 어떻게 3D 볼륨 렌더링으로 확장시킬 수 있을까? 위에서 본 비슷한 프로세스를 구현하려면 모든 복셀(볼륨 픽셀)에 대한 지식이 필요합니다. 알고 보니, 이것은 해보기에 꽤 어려운 작업입니다.
@@ -58,24 +67,24 @@ EPOCHS = 20
 `npz` 데이터 파일은 이미지, 카메라 포즈(camera poses), 초점 거리(focal length) 정보를 가지고 있습니다. 이미지는 Figure 3에서 보이는 것처럼 다양한 뷰에서 찍은 사진입니다.
 
 </br>
-<div style ="text-align:center";><img src="./media/204_3.png"><figcaption>Figure 3: Multiple camera angles (출처 : NeRF 논문)</figcaption></img></div>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_3.png"><figcaption>Figure 3: Multiple camera angles (출처 : NeRF 논문)</figcaption></img></div>
 </br>
 
 위에서 나온 카메라 포즈에 대해 이해하기 위해서 먼저 카메라는 실제와 2-D 이미지 사이의 매핑(mapping)이라고 생각해야합니다.
 
 
 아래의 수식을 봅시다:
-<div style ="text-align:center";><img src="./media/204_4.png" width=200></img></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_4.png" width=200></img></div></br>
 
 **x**는 2-D 이미지 상의 어떤 한 점이고, **X**는 3-D 월드의 한 점 그리고 **P**는 카메라-매트릭스(camera-matrix) 입니다. **P**는 실제 물체를 이미지 평면에 매핑하는 데 중요한 역할 3 x 4 매트릭스 입니다
 
 </br>
-<div style ="text-align:center";><img src="./media/204_5.png" width=400></img></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_5.png" width=400></img></div></br>
 
 카메라-매트릭스는 포즈 매트릭스를 생성하기 위해 3 x 1 열 [image height, image width, focal length]와 연결된 아핀 변환 매트릭스(affine transform amtrix)입니다. 첫 번째 3 x 3 블록이 카메라의 시점입니다. 축은 카메라가 앞으로 -z를 향하는 [아래, 오른쪽, 뒤] 또는 [-y, x, z]입니다.
 
 </br>
-<div style ="text-align:center";><img src="./media/204_6.png" width=400><figcaption>Figure 5: The affine transformation.</figcaption></img></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_6.png" width=400><figcaption>Figure 5: The affine transformation.</figcaption></img></div></br>
 
 COLMAP 프레임은 [right, down, forwards] 또는 [x, -y, -z] 입니다. COLMAP에 대한 자세한 설명은 [여기](https://colmap.github.io/)를 참고하세요.
 
@@ -100,7 +109,7 @@ plt.imshow(images[np.random.randint(low=0, high=num_images)])
 Downloading data from https://people.eecs.berkeley.edu/~bmild/nerf/tiny_nerf_data.npz
 12730368/12727482 [==============================] - 0s 0us/step
 ```
-<div style ="text-align:center";><img src="./media/204_7.png" width=200></img></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_7.png" width=200></img></div></br>
 
 ---
 ### Data pipeline
@@ -112,23 +121,23 @@ Downloading data from https://people.eecs.berkeley.edu/~bmild/nerf/tiny_nerf_dat
 N픽셀의 이미지를 생각해봅시다. 우리는 각 픽셀을 통해 레이를 쏘고 레이의 몇 가지 점을 샘플링 합니다. 레이는 일반적으로 r(t) = o + td 식에 의해 파라미터화되며, 여기서 t는 파라미터, o는 원점, d는 Figure 6과 같이 단위 방향 벡터입니다.
 
 </br>
-<div style ="text-align:center";><img src="./media/204_8.gif"><figcaption>Figure 6: t가 3일 때의 r(t) = o + td</figcaption></img></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_8.gif"><figcaption>Figure 6: t가 3일 때의 r(t) = o + td</figcaption></img></div></br>
 
 Figure 7에서, 우리는 레이를 고려하여, 우리는 레이의 몇 가지 랜덤한 점을 샘플링합니다. 이러한 샘플링 포인트는 각각 고유한 위치(x, y, z)를 가지며 레이는 시야각(theta, phi)을 가집니다. 시야각(viewing angle)은 특히 흥미로운데, 우리는 각각 독특한 시야각을 가진 다양한 방법으로 하나의 픽셀을 통해 레이를 촬영할 수 있기 때문입니다. 여기서 주목해야 할 또 다른 흥미로운 점은 샘플링 프로세스에 추가되는 노이즈입니다. 우리는 샘플이 연속적인 분포에 해당하도록 각 샘플에 균일한 노이즈를 추가합니다. Figure 7에서 파란색 점은 고르게 분포되었고, 흰색 점(t1, t2, t3)은 표본 사이에 무작위로 배치되었습니다.
 
 </br>
-<div style ="text-align:center";><img src="./media/204_9.gif"><figcaption>Figure 7: 레이의 샘플링 포인트들</figcaption></img></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_9.gif"><figcaption>Figure 7: 레이의 샘플링 포인트들</figcaption></img></div></br>
 
 Figure 8은 전체 샘플링 과정을 3D로 보여주며, 여기서 흰색 이미지에서 나오는 레이를 볼 수 있습니다. 즉, 각 픽셀에 해당하는 레이가 존재하고 각 레이의 서로 다른 지점에서 샘플링 한다는 것입니다.
 
 </br>
-<div style ="text-align:center";><img src="./media/204_10.gif"><figcaption>Figure 8: 3D상에 있는 이미지의 모든 픽셀에서 레이 쏘기</figcaption></img></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_10.gif"><figcaption>Figure 8: 3D상에 있는 이미지의 모든 픽셀에서 레이 쏘기</figcaption></img></div></br>
 
 이 샘플링된 포인트들은 NeRF 모델의 인풋입니다. 그리고 모델은 샘플링된 포인트에 대한 RGB 컬러와 볼륨 밀도(volume density)를 물어봅니다.
 
 
 </br>
-<div style ="text-align:center";><img src="./media/204_11.png"><figcaption>Figure 9: 데이터 파이프라인 (출처 : NeRF 논문)</figcaption></img></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_11.png"><figcaption>Figure 9: 데이터 파이프라인 (출처 : NeRF 논문)</figcaption></img></div></br>
 
 ```python
 def encode_position(x):
@@ -507,121 +516,121 @@ create_gif("images/*.png", "training.gif")
 Epoch 1/20
 16/16 [==============================] - 15s 753ms/step - loss: 0.1134 - psnr: 9.7278 - val_loss: 0.0683 - val_psnr: 12.0722
 ```
-<div style ="text-align:center";><img src="./media/204_12.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_12.png"></div></br>
 
 ```bash
 Epoch 2/20
 16/16 [==============================] - 13s 752ms/step - loss: 0.0648 - psnr: 12.4200 - val_loss: 0.0664 - val_psnr: 12.1765
 ```
-<div style ="text-align:center";><img src="./media/204_13.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_13.png"></div></br>
 
 ```bash
 Epoch 3/20
 16/16 [==============================] - 13s 746ms/step - loss: 0.0607 - psnr: 12.5281 - val_loss: 0.0673 - val_psnr: 12.0121
 ```
-<div style ="text-align:center";><img src="./media/204_14.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_14.png"></div></br>
 
 ```bash
 Epoch 4/20
 16/16 [==============================] - 13s 758ms/step - loss: 0.0595 - psnr: 12.7050 - val_loss: 0.0646 - val_psnr: 12.2768
 ```
-<div style ="text-align:center";><img src="./media/204_15.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_15.png"></div></br>
 
 ```bash
 Epoch 5/20
 16/16 [==============================] - 13s 755ms/step - loss: 0.0583 - psnr: 12.7522 - val_loss: 0.0613 - val_psnr: 12.5351
 ```
-<div style ="text-align:center";><img src="./media/204_16.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_16.png"></div></br>
 
 ```bash
 Epoch 6/20
 16/16 [==============================] - 13s 749ms/step - loss: 0.0545 - psnr: 13.0654 - val_loss: 0.0553 - val_psnr: 12.9512
 ```
-<div style ="text-align:center";><img src="./media/204_17.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_17.png"></div></br>
 
 ```bash
 Epoch 7/20
 16/16 [==============================] - 13s 744ms/step - loss: 0.0480 - psnr: 13.6313 - val_loss: 0.0444 - val_psnr: 13.7838
 ```
-<div style ="text-align:center";><img src="./media/204_18.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_18.png"></div></br>
 
 ```bash
 Epoch 8/20
 16/16 [==============================] - 13s 763ms/step - loss: 0.0359 - psnr: 14.8570 - val_loss: 0.0342 - val_psnr: 14.8823
 ```
-<div style ="text-align:center";><img src="./media/204_19.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_19.png"></div></br>
 
 ```bash
 Epoch 9/20
 16/16 [==============================] - 13s 758ms/step - loss: 0.0299 - psnr: 15.5374 - val_loss: 0.0287 - val_psnr: 15.6171
 ```
-<div style ="text-align:center";><img src="./media/204_20.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_20.png"></div></br>
 
 ```bash
 Epoch 10/20
 16/16 [==============================] - 13s 779ms/step - loss: 0.0273 - psnr: 15.9051 - val_loss: 0.0266 - val_psnr: 15.9319
 ```
-<div style ="text-align:center";><img src="./media/204_21.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_21.png"></div></br>
 
 ```bash
 Epoch 11/20
 16/16 [==============================] - 13s 736ms/step - loss: 0.0255 - psnr: 16.1422 - val_loss: 0.0250 - val_psnr: 16.1568
 ```
-<div style ="text-align:center";><img src="./media/204_22.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_22.png"></div></br>
 
 ```bash
 Epoch 12/20
 16/16 [==============================] - 13s 746ms/step - loss: 0.0236 - psnr: 16.5074 - val_loss: 0.0233 - val_psnr: 16.4793
 ```
-<div style ="text-align:center";><img src="./media/204_23.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_23.png"></div></br>
 
 ```bash
 Epoch 13/20
 16/16 [==============================] - 13s 755ms/step - loss: 0.0217 - psnr: 16.8391 - val_loss: 0.0210 - val_psnr: 16.89502
 ```
-<div style ="text-align:center";><img src="./media/204_24.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_24.png"></div></br>
 
 ```bash
 Epoch 14/20
 16/16 [==============================] - 13s 741ms/step - loss: 0.0197 - psnr: 17.2245 - val_loss: 0.0187 - val_psnr: 17.3766
 ```
-<div style ="text-align:center";><img src="./media/204_25.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_25.png"></div></br>
 
 ```bash
 Epoch 15/20
 16/16 [==============================] - 13s 739ms/step - loss: 0.0179 - psnr: 17.6246 - val_loss: 0.0179 - val_psnr: 17.5445
 ```
-<div style ="text-align:center";><img src="./media/204_26.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_26.png"></div></br>
 
 ```bash
 Epoch 16/20
 16/16 [==============================] - 13s 735ms/step - loss: 0.0175 - psnr: 17.6998 - val_loss: 0.0180 - val_psnr: 17.5154
 ```
-<div style ="text-align:center";><img src="./media/204_27.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_27.png"></div></br>
 
 ```bash
 Epoch 17/20
 16/16 [==============================] - 13s 741ms/step - loss: 0.0167 - psnr: 17.9393 - val_loss: 0.0156 - val_psnr: 18.1784
 ```
-<div style ="text-align:center";><img src="./media/204_28.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_28.png"></div></br>
 
 ```bash
 Epoch 18/20
 16/16 [==============================] - 13s 750ms/step - loss: 0.0150 - psnr: 18.3875 - val_loss: 0.0151 - val_psnr: 18.2811
 ```
-<div style ="text-align:center";><img src="./media/204_29.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_29.png"></div></br>
 
 ```bash
 Epoch 19/20
 16/16 [==============================] - 13s 755ms/step - loss: 0.0141 - psnr: 18.6476 - val_loss: 0.0139 - val_psnr: 18.6216
 ```
-<div style ="text-align:center";><img src="./media/204_30.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_30.png"></div></br>
 
 ```bash
 Epoch 20/20
 16/16 [==============================] - 14s 777ms/step - loss: 0.0139 - psnr: 18.7131 - val_loss: 0.0137 - val_psnr: 18.7259
 ```
-<div style ="text-align:center";><img src="./media/204_31.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_31.png"></div></br>
 
 ```bash
 100%|██████████| 20/20 [00:00<00:00, 57.59it/s]
@@ -632,7 +641,7 @@ Epoch 20/20
 
 여기 학습 과정이 있습니다. 손실이 감소함에 따라 렌더링된 이미지와 뎁스 맵이 개선되고 있습니다. 로컬 시스템에서 생성된 training.gif 파일을 볼 수 있습니다.
 
-<div style ="text-align:center";><img src="./media/204_32.gif"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_32.gif"></div></br>
 ---
 
 ### Inference
@@ -669,7 +678,7 @@ for ax, ori_img, recons_img, depth_map in zip(
     )
     ax[2].set_title("Depth Map")
 ```
-<div style ="text-align:center";><img src="./media/204_33.png"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_33.png"></div></br>
 ---
 
 ### Render 3D Scene
@@ -762,7 +771,7 @@ imageio.mimwrite(rgb_video, rgb_frames, fps=30, quality=7, macro_block_size=None
 
 여기서 우리는 렌더링된 360도 장면의 뷰를 볼 수 있습니다. 이 모델은 20 에폭 만에 희소 이미지 세트를 통해 전체 볼륨메트릭 스페이스를 성공적으로 학습했습니다. **rgb_video.mp4**라는 이름으로 로컬에 저장된 렌더링된 비디오를 볼 수 있습니다.
 
-<div style ="text-align:center";><img src="./media/204_34.gif"></div></br>
+<div style ="text-align:center";><img src="{{ site.url }}/images/media/204_34.gif"></div></br>
 
 ---
 
@@ -779,11 +788,11 @@ imageio.mimwrite(rgb_video, rgb_frames, fps=30, quality=7, macro_block_size=None
   </tr>
   <tr>
     <th>100</th>
-    <th><div style ="text-align:center";><img src="./media/204_35.gif"></img></div></th>
+    <th><div style ="text-align:center";><img src="{{ site.url }}/images/media/204_35.gif"></img></div></th>
    </tr> 
   <tr>
     <th>200</th>
-    <th><div style ="text-align:center";><img src="./media/204_36.gif"></th>
+    <th><div style ="text-align:center";><img src="{{ site.url }}/images/media/204_36.gif"></th>
    </tr> 
 </table>
 
