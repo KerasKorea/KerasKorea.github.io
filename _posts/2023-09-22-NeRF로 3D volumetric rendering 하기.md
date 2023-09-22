@@ -18,21 +18,22 @@ comments: true
 ### Introduction
 이 튜토리얼에서는 우리는 Ben Mildenhall et. al가 쓴 [NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis](https://arxiv.org/abs/2003.08934) 논문의 최소로 필요한 만큼만을 구현하고 있습니다. 저자들은 뉴럴넷을 이용한 볼륨렌더링 방법으로 novel view synthesis 하는 독창적인 방법에 대해 제안합니다.
 
-위 설명에 대해 당신을 직관적으로 돕기 위해, 이 질문으로 시작해봅시다: 이미지에서 픽셀의 위치를 뉴럴넷에 주고 그 위치의 색을 예측하도록 요청하는 것이 가능할까요?
+위 설명에 대해 당신을 직관적으로 돕기 위해, 이 질문으로 시작해보겠습니다: 이미지에서 픽셀의 위치를 뉴럴넷에 주고 그 위치의 색을 예측하도록 요청하는 것이 가능할까요?
 
 <img src="{{ site.url }}/images/media/204_1.png">
-Figure 1: 뉴럴넷에 이미지내의 좌표를 주고 해당 좌표의 색 예측하기
+Figure 1: 뉴럴넷에 이미지 내의 좌표를 주고 해당 좌표의 색 예측하기
 
 
-뉴럴넷은 아마도 이미지를 외울 것(오버피팅)입니다. 이것은 우리의 뉴럴넷이 이미지 전체에 대해 wieghts로 인코딩한다는 것을 의미합니다. 우리는 각 위치에 대해 조회해볼 수 있고, 결국 전체 이미지를 reconstruction 할 수 있습니다.
+뉴럴넷은 아마도 이미지를 외울 것(오버피팅)입니다. 이것은 우리의 뉴럴넷이 이미지 전체에 대해 wieghts로 인코딩한다는 것을 의미합니다. 우리는 각 위치에 대한 물체의 모습을 예측할 수 있고, 결국 전체 이미지를 reconstruction 할 수 있습니다.
 
 
 <img src="{{ site.url }}/images/media/204_2.png">
-Figure 2: 훈련된 신경망은 이미지를 스크래치부터 reconstrut 한다
+Figure 2: 훈련된 신경망은 이미지를 스크래치부터 reconstrution 한다
 
 
-이제 한 가지 질문이 떠오릅니다. 그럼 우리는 이걸 어떻게 3D 볼륨 렌더링으로 확장시킬 수 있을까? 위에서 본 비슷한 프로세스를 구현하려면 모든 복셀(볼륨 픽셀)에 대한 지식이 필요합니다. 알고 보니, 이것은 해보기에 꽤 어려운 작업입니다.
-NeRF 논문의 저자들의 미니멀하고 우아한 방법은 3D 장면을 몇 개의 사진을 통해 학습하는 것을 제안합니다. 복셀을 학습에 사용하지 않기로 한다는 것입니다. 뉴럴넷은 volumetric scene을 모델링하는 방법을 학습하여 학습 시간에 모델이 본 적 없는 3D 장면의 새로운 뷰(이미지)를 생성합니다.
+이제 한 가지 질문이 떠오릅니다. 그럼 우리는 이걸 어떻게 3D 볼륨 렌더링으로 확장시킬 수 있을까요? 위에서 본 비슷한 프로세스를 구현하려면 모든 복셀(볼륨 픽셀)에 대한 지식이 필요합니다. 복셀을 사용하는 것은 꽤 어려운 작업입니다.
+따라서 NeRF 논문의 저자들의 미니멀하고 우아한 방법은 3D 장면을 몇 개의 사진을 이용해 학습하는 것을 제안합니다. 그 말은, 복셀을 학습에 사용하지 않기로 한다는 것입니다. 
+저자가 제안한 뉴럴넷은 복셀을 사용하지 않고 volumetric scene을 모델링하는 방법을 학습하여 학습동안 본 적 없는 3D 장면의 새로운 뷰(이미지)를 생성합니다.
 
 ----
 
@@ -71,7 +72,7 @@ EPOCHS = 20
 Figure 3: Multiple camera angles (출처 : NeRF 논문)
 
 
-위에서 나온 카메라 포즈에 대해 이해하기 위해서 먼저 카메라는 실제와 2-D 이미지 사이의 매핑(mapping)이라고 생각해야합니다.
+위에서 나온 카메라 포즈에 대해 이해하기 위해서 먼저 카메라는 실제와 2D 이미지 사이의 매핑(mapping)이라고 생각해야합니다.
 
 
 아래의 수식을 봅시다:
@@ -122,7 +123,6 @@ Downloading data from https://people.eecs.berkeley.edu/~bmild/nerf/tiny_nerf_dat
 ### Data pipeline
 
 이제 카메라 매트릭스의 개념과 3D 장면에서 2D 이미지로의 매핑을 이해했으므로, 역매핑(inverse mapping), 즉 2D 이미지에서 3D 장면으로의 매핑에 대해 이야기해 보겠습니다.
-
 우리는 레이 캐스팅(ray casting) 및 트레이싱(tracing)과 더불어 일반적인 컴퓨터 그래픽 기술 볼륨 렌더링에 대한 이야기를 해야할 것 같습니다. 이 장에서는 이러한 기술에 대한 이야기는 이해에 가속도를 줄 것입니다.
 
 N픽셀의 이미지를 생각해봅시다. 우리는 각 픽셀을 통해 레이를 쏘고 레이의 몇 가지 점을 샘플링 합니다. 레이는 일반적으로 r(t) = o + td 식에 의해 파라미터화되며, 여기서 t는 파라미터, o는 원점, d는 Figure 6과 같이 단위 방향 벡터입니다.
@@ -132,7 +132,7 @@ N픽셀의 이미지를 생각해봅시다. 우리는 각 픽셀을 통해 레�
 Figure 6: t가 3일 때의 r(t) = o + td
 
 
-Figure 7에서, 우리는 레이를 고려하여, 우리는 레이의 몇 가지 랜덤한 점을 샘플링합니다. 이러한 샘플링 포인트는 각각 고유한 위치(x, y, z)를 가지며 레이는 시야각(theta, phi)을 가집니다. 시야각(viewing angle)은 특히 흥미로운데, 우리는 각각 독특한 시야각을 가진 다양한 방법으로 하나의 픽셀을 통해 레이를 촬영할 수 있기 때문입니다. 여기서 주목해야 할 또 다른 흥미로운 점은 샘플링 프로세스에 추가되는 노이즈입니다. 우리는 샘플이 연속적인 분포에 해당하도록 각 샘플에 균일한 노이즈를 추가합니다. Figure 7에서 파란색 점은 고르게 분포되었고, 흰색 점(t1, t2, t3)은 표본 사이에 무작위로 배치되었습니다.
+Figure 7에서, 우리는 레이의 몇 가지 랜덤한 점을 샘플링합니다. 이러한 샘플링 포인트는 각각 고유한 위치(x, y, z)를 가지며 레이는 시야각(theta, phi)을 가집니다. 시야각(viewing angle)은 특히 흥미로운데, 우리는 각각 독특한 시야각을 가진 다양한 방법으로 하나의 픽셀을 통해 레이를 촬영할 수 있기 때문입니다. 여기서 주목해야 할 또 다른 흥미로운 점은 샘플링 프로세스에 추가되는 노이즈입니다. 우리는 샘플이 연속적인 분포에 해당하도록 각 샘플에 균일한 노이즈를 추가합니다. Figure 7에서 파란색 점은 고르게 분포되었고, 흰색 점(t1, t2, t3)은 표본 사이에 무작위로 배치되었습니다.
 
 
 <img src="{{ site.url }}/images/media/204_9.gif">
@@ -148,7 +148,7 @@ Figure 8은 전체 샘플링 과정을 3D로 보여주며, 여기서 흰색 이�
 Figure 8: 3D상에 있는 이미지의 모든 픽셀에서 레이 쏘기
 
 
-이 샘플링된 포인트들은 NeRF 모델의 인풋입니다. 그리고 모델은 샘플링된 포인트에 대한 RGB 컬러와 볼륨 밀도(volume density)를 물어봅니다.
+이 샘플링된 포인트들은 NeRF 모델의 인풋입니다. 그리고 모델은 샘플링된 포인트에 대한 RGB 컬러와 볼륨 밀도(volume density)를 출력합니다.
 
 
 <img src="{{ site.url }}/images/media/204_11.png">
@@ -173,7 +173,7 @@ def encode_position(x):
 
 
 def get_rays(height, width, focal, pose):
-    """레이의 원점(origin point)과 방향 벡터(direction vector)를 계산
+    """레이의 원점(origin point)과 방향 벡터(direction vector)를 계산합니다
 
     Args:
         height: 이미지 Height
@@ -210,12 +210,12 @@ def get_rays(height, width, focal, pose):
     ray_directions = tf.reduce_sum(camera_dirs, axis=-1)
     ray_origins = tf.broadcast_to(height_width_focal, tf.shape(ray_directions))
 
-    # Ray의 원점과 방향 정보를 리턴한다
+    # Ray의 원점과 방향 정보를 리턴합니다
     return (ray_origins, ray_directions)
 
 
 def render_flat_rays(ray_origins, ray_directions, near, far, num_samples, rand=False):
-    """레이를 렌더링하고 flatten 시킨다
+    """레이를 렌더링하고 flatten 시킵니다
 
     Args:
         ray_origins: 레이의 원점
@@ -229,10 +229,10 @@ def render_flat_rays(ray_origins, ray_directions, near, far, num_samples, rand=F
         각 레이의 flattened 레이와 샘플 포인트로 구성된 튜플
     """
     # 3D point를 계산
-    # 수식: r(t) = o+td -> "t"를 여기서 만든다
+    # 수식: r(t) = o+td -> "t"를 여기서 만듭니다
     t_vals = tf.linspace(near, far, num_samples)
     if rand:
-        # 샘플 공간에 균일한 노이즈를 주입하여 샘플링을 조금 더 다양하게 만듭니다.
+        # 샘플 공간에 균일한 노이즈를 주입하여 샘플링을 조금 더 다양하게 만듭니다
         shape = list(ray_origins.shape[:-1]) + [num_samples]
         noise = tf.random.uniform(shape=shape) * (far - near) / num_samples
         t_vals = t_vals + noise
@@ -247,7 +247,7 @@ def render_flat_rays(ray_origins, ray_directions, near, far, num_samples, rand=F
 
 
 def map_fn(pose):
-    """개별 포즈를 flattened 레이 및 샘플 점에 매핑
+    """개별 포즈를 flattened 레이 및 샘플 점에 매핑합니다
 
     Args:
         pose: 카메라 포즈 매트릭스
@@ -665,9 +665,8 @@ Epoch 20/20
 
 ### Inference
 
-이 섹션에서는 모델에게 장면의 새로운 뷰를 만들어내도록 할 것입니다. 모델에게 학습 단계에서 장면의 106개 보기가 주어졌습니다. 학습용 이미지 모음에서 장면(scene)의 각도가 모두 포함될 수는 없습니다. 학습된 모델은 희소 학습 이미지 셋으로 전체 3-D 장면을 만들어낼 수 있습니다.
-
-여기서는 모델에 다른 포즈를 제공하고 해당 카메라 뷰에 해당하는 2-D 이미지를 제공하도록 할것입니다. 모든 360도 뷰에 대해 모델을 추론한다면, 그것은 모든 주변의 전체 경관에 대한 오버뷰를 제공할 것입니다.
+이 섹션에서는 모델에게 새로운 뷰에 대한 장면을 만들어내도록 할 것입니다. 모델에게 학습 단계에서 106 장면이 주어졌습니다. 학습용 이미지 모음에서 장면(scene)의 모든 각도가 포함될 수는 없습니다. 학습된 모델은 희소 학습 이미지 셋으로 보지못한 뷰까지도 예측하여 전체 3D 장면을 만들어낼 수 있습니다.
+여기서는 모델에 우리가 원하는 뷰의 포즈를 제공하고 해당 카메라 뷰에 해당하는 2D 이미지를 제공하도록 할것입니다. 모든 360도 뷰에 대해 모델을 추론한다면, 그것은 모든 주변의 전체 경관에 대한 오버뷰를 제공할 것입니다.
 
 ```python
 # 학습된 NeRF 모델을 가져오고 추론
