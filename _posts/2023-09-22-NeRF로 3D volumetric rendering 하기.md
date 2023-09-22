@@ -75,6 +75,7 @@ Figure 3: Multiple camera angles (출처 : NeRF 논문)
 
 
 아래의 수식을 봅시다:
+
 <img src="{{ site.url }}/images/media/204_4.png" width=200>
 
 **x**는 2-D 이미지 상의 어떤 한 점이고, **X**는 3-D 월드의 한 점 그리고 **P**는 카메라-매트릭스(camera-matrix) 입니다. **P**는 실제 물체를 이미지 평면에 매핑하는 데 중요한 역할 3 x 4 매트릭스 입니다
@@ -84,6 +85,7 @@ Figure 3: Multiple camera angles (출처 : NeRF 논문)
 카메라-매트릭스는 포즈 매트릭스를 생성하기 위해 3 x 1 열 [image height, image width, focal length]와 연결된 아핀 변환 매트릭스(affine transform amtrix)입니다. 첫 번째 3 x 3 블록이 카메라의 시점입니다. 축은 카메라가 앞으로 -z를 향하는 [아래, 오른쪽, 뒤] 또는 [-y, x, z]입니다.
 
 <img src="{{ site.url }}/images/media/204_6.png" width=400>
+
 Figure 5: The affine transformation.
 
 
@@ -125,6 +127,7 @@ Downloading data from https://people.eecs.berkeley.edu/~bmild/nerf/tiny_nerf_dat
 N픽셀의 이미지를 생각해봅시다. 우리는 각 픽셀을 통해 레이를 쏘고 레이의 몇 가지 점을 샘플링 합니다. 레이는 일반적으로 r(t) = o + td 식에 의해 파라미터화되며, 여기서 t는 파라미터, o는 원점, d는 Figure 6과 같이 단위 방향 벡터입니다.
 
 <img src="{{ site.url }}/images/media/204_8.gif">
+
 Figure 6: t가 3일 때의 r(t) = o + td
 
 
@@ -132,6 +135,7 @@ Figure 7에서, 우리는 레이를 고려하여, 우리는 레이의 몇 가지
 
 
 <img src="{{ site.url }}/images/media/204_9.gif">
+
 Figure 7: 레이의 샘플링 포인트들
 
 
@@ -139,6 +143,7 @@ Figure 8은 전체 샘플링 과정을 3D로 보여주며, 여기서 흰색 이�
 
 
 <img src="{{ site.url }}/images/media/204_10.gif">
+
 Figure 8: 3D상에 있는 이미지의 모든 픽셀에서 레이 쏘기
 
 
