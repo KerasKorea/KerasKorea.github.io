@@ -2,7 +2,7 @@
 layout: post
 title:  "NeRF로 3D volumetric rendering 하기"
 categories: 3D Computer Vision
-tags: [Computer Vision, 3D, Novel View Synthesis]
+tags: [Computer Vision, Novel View Synthesis]
 comments: true
 ---
 
