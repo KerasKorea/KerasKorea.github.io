@@ -95,7 +95,8 @@ COLMAP 프레임은 [right, down, forwards] 또는 [x, -y, -z] 입니다. COLMAP
 ```python
 # 데이터가 존재하지 않으면 다운로드
 file_name = "tiny_nerf_data.npz"
-url = "https://people.eecs.berkeley.edu/~bmild/nerf/tiny_nerf_data.npz"
+# 기존의 url은 동작하지 않으므로 새 url로 교체함
+url =  "http://cseweb.ucsd.edu/~viscomp/projects/LF/papers/ECCV20/nerf/tiny_nerf_data.npz"
 if not os.path.exists(file_name):
     data = keras.utils.get_file(fname=file_name, origin=url)
 
@@ -190,26 +191,26 @@ def get_rays(height, width, focal, pose):
         indexing="xy",
     )
 
-    # Normalize the x axis coordinates.
+    # x축 좌표 정규화
     transformed_i = (i - width * 0.5) / focal
 
-    # Normalize the y axis coordinates.
+    # y축 좌표 정규화
     transformed_j = (j - height * 0.5) / focal
 
-    # Create the direction unit vectors.
+    # 방향 단위 벡터를 생성
     directions = tf.stack([transformed_i, -transformed_j, -tf.ones_like(i)], axis=-1)
 
-    # Get the camera matrix.
+    # 카메라 매트릭스 가져오기
     camera_matrix = pose[:3, :3]
     height_width_focal = pose[:3, -1]
 
-    # Get origins and directions for the rays.
+    # Ray의 원점과 방향 정보 가져오기
     transformed_dirs = directions[..., None, :]
     camera_dirs = transformed_dirs * camera_matrix
     ray_directions = tf.reduce_sum(camera_dirs, axis=-1)
     ray_origins = tf.broadcast_to(height_width_focal, tf.shape(ray_directions))
 
-    # Return the origins and directions.
+    # Ray의 원점과 방향 정보를 리턴한다
     return (ray_origins, ray_directions)
 
 
@@ -228,7 +229,7 @@ def render_flat_rays(ray_origins, ray_directions, near, far, num_samples, rand=F
         각 레이의 flattened 레이와 샘플 포인트로 구성된 튜플
     """
     # 3D point를 계산
-    # 수식: r(t) = o+td -> "t"를 여기서 만듭니다.
+    # 수식: r(t) = o+td -> "t"를 여기서 만든다
     t_vals = tf.linspace(near, far, num_samples)
     if rand:
         # 샘플 공간에 균일한 노이즈를 주입하여 샘플링을 조금 더 다양하게 만듭니다.
